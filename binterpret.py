@@ -18,6 +18,7 @@ def binterpret(filename, abx, aby, offsetx, offsety):
         for x in range(0, abx):
             new_data = '1' if img.getpixel((offsetx + x * blockx + 2, offsety + y * blocky + 2))[0] < 128 else '0'
             binary_data += new_data
+    print binary_data
     #print int(binary_data,2)
 
 if __name__ == "__main__":
