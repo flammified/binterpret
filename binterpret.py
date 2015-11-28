@@ -3,23 +3,41 @@ import traceback
 import argparse
 from PIL import Image
 
-def binterpret(filename, abx, aby, offsetx, offsety):
+def in_rect(x, y, rect):
+    if x >= rect[0][0] and y>=rect[0][1] and x < rect[1][0] and y < rect[1][1]:
+        return True
+    return False
+
+
+def binterpret(filename, abx, aby, offsetx, offsety, inverse):
     try:
         img = Image.open(filename)
     except IOError:
         traceback.print_exc(file=sys.stdout)
         exit(3)
-    blockx = img.size[0]/abx
-    blocky = img.size[1]/aby
+    blockx = (img.size[0] - offsetx)/abx
+    blocky = (img.size[1] - offsety - 25)/aby
 
     binary_data = ""
 
     for y in range(0, aby):
         for x in range(0, abx):
-            new_data = '1' if img.getpixel((offsetx + x * blockx + 2, offsety + y * blocky + 2))[0] < 128 else '0'
+            if in_rect(x, y, [(0,0), (7,7)]):
+                continue
+            if in_rect(x, y, [(abx - 7, 0), (abx,7)]):
+                continue
+            if in_rect(x, y, [(0,aby - 7), (7,aby)]):
+                continue
+
+            to_add = '1' if not inverse else '0'
+            to_not_add  = '0' if not inverse else '1'
+            new_data = to_add if img.getpixel((offsetx + x * blockx + 2, offsety + y * blocky + 2))[0] < 128 else to_not_add
             binary_data += new_data
-    print binary_data
-    #print int(binary_data,2)
+
+    d = [binary_data[8*i:8*(i+1)] for i in range(len(binary_data)/8)]
+    d = [int(i, 2) for i in d]
+    print "".join(chr(i) for i in d)
+
 
 if __name__ == "__main__":
 
@@ -31,6 +49,7 @@ if __name__ == "__main__":
     parser.add_argument('-yblocks', type=int ,help="The amount of squares in height. Default is 8")
     parser.add_argument('-offsetx', type=int ,help="The x-offset in pixels")
     parser.add_argument('-offsety', type=int ,help="The y-offset in pixels")
+    parser.add_argument('--inverse', action='store_true', default=False, help="Inverse the binary data")
 
     args = parser.parse_args()
 
@@ -39,4 +58,4 @@ if __name__ == "__main__":
     offsetx = args.offsetx if args.offsetx else 0
     offsety = args.offsety if args.offsety else 0
 
-    binterpret(args.filename, xblocks, yblocks, offsetx, offsety)
+    binterpret(args.filename, xblocks, yblocks, offsetx, offsety, args.inverse)
