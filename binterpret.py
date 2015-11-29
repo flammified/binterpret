@@ -71,14 +71,14 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
 
-    xblocks = args.xblocks if args.xblocks else DEFAULT
-    yblocks = args.yblocks if args.yblocks else DEFAULT
-    markx = args.markx if args.markx else DEFAULT
-    marky = args.marky if args.marky else DEFAULT
-    offsetx = args.offsetx if args.offsetx else 0
-    offsety = args.offsety if args.offsety else 0
-    marginx = args.marginx if args.marginx else 0
-    marginy = args.marginy if args.marginy else 0
+    xblocks = args.xblocks if args.xblocks != None else DEFAULT
+    yblocks = args.yblocks if args.yblocks != None else DEFAULT
+    markx = args.markx if args.markx != None else DEFAULT
+    marky = args.marky if args.marky != None else DEFAULT
+    offsetx = args.offsetx if args.offsetx != None else 0
+    offsety = args.offsety if args.offsety != None else 0
+    marginx = args.marginx if args.marginx != None else 0
+    marginy = args.marginy if args.marginy != None else 0
 
     data = binterpret(
                         args.filename,
