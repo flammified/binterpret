@@ -12,6 +12,16 @@ def string_reverse(s):
         return '1'
     return '0'
 
+def process_custom_qr(
+                        filename,
+                        abx, aby,
+                        lc,
+                        w, h,
+                        rects_to_exclude=None
+                    ):
+    pass
+
+
 def process_qr(
                 filename,
                 abx, aby,
