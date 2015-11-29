@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 import sys
 import traceback
 import argparse
@@ -45,9 +47,7 @@ def binterpret(filename, abx=8, aby=8, offsetx=0, offsety=0, msizex=8, msizey=8,
 
 
 if __name__ == "__main__":
-
-    DEFAULT = 8
-
+    DEFAULT =
     parser = argparse.ArgumentParser(description='Read a QRcode as binary data')
 
     #Converting arguments
@@ -69,8 +69,8 @@ if __name__ == "__main__":
     yblocks = args.yblocks if args.yblocks else DEFAULT
     offsetx = args.offsetx if args.offsetx else 0
     offsety = args.offsety if args.offsety else 0
-    markx = args.markx if args.markx else 8
-    marky = args.marky if args.marky else 8
+    markx = args.markx if args.markx else DEFAULT
+    marky = args.marky if args.marky else DEFAULT
 
     data = binterpret(args.filename, xblocks, yblocks, offsetx, offsety, markx, marky, args.inverse)
 
