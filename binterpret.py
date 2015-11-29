@@ -8,8 +8,13 @@ def in_rect(x, y, rect):
         return True
     return False
 
+def string_reverse(s):
+    if s == '0':
+        return '1'
+    return '0'
 
-def binterpret(filename, abx, aby, offsetx, offsety, inverse):
+
+def binterpret(filename, abx, aby, offsetx, offsety, msizex, msizey, inverse):
     try:
         img = Image.open(filename)
     except IOError:
@@ -22,17 +27,21 @@ def binterpret(filename, abx, aby, offsetx, offsety, inverse):
 
     for y in range(0, aby):
         for x in range(0, abx):
-            if in_rect(x, y, [(0,0), (8,8)]):
+
+            #The three markings in the corner
+            if in_rect(x, y, [(0,0), (markx,marky)]):
                 continue
-            if in_rect(x, y, [(abx - 8, 0), (abx,8)]):
+            if in_rect(x, y, [(abx - markx, 0), (abx,marky)]):
                 continue
-            if in_rect(x, y, [(0,aby - 8), (8,aby)]):
+            if in_rect(x, y, [(0,aby - marky), (markx,aby)]):
                 continue
 
             to_add = '1' if not inverse else '0'
-            to_not_add  = '0' if not inverse else '1'
-            new_data = to_add if img.getpixel((offsetx + x * blockx + 2, offsety + y * blocky + 2))[0] < 128 else to_not_add
+            pixel_red = img.getpixel((offsetx + x * blockx, offsety + y * blocky))[0]
+            new_data = to_add if pixel_red < 128 else string_reverse(to_add)
             binary_data += new_data
+
+    print binary_data
 
     d = [binary_data[8*i:8*(i+1)] for i in range(len(binary_data)/8)]
     d = [int(i, 2) for i in d]
@@ -46,9 +55,11 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Read a QRcode as binary data')
     parser.add_argument('filename', help="The image to interpret")
     parser.add_argument('-xblocks', type=int, help="The amount of squares in width.  Default is 8")
-    parser.add_argument('-yblocks', type=int ,help="The amount of squares in height. Default is 8")
-    parser.add_argument('-offsetx', type=int ,help="The x-offset in pixels")
-    parser.add_argument('-offsety', type=int ,help="The y-offset in pixels")
+    parser.add_argument('-yblocks', type=int, help="The amount of squares in height. Default is 8")
+    parser.add_argument('-offsetx', type=int, help="The x-offset in pixels")
+    parser.add_argument('-offsety', type=int, help="The y-offset in pixels")
+    parser.add_argument('-markx', type=int, help="The amount of squares of the markers in width. Default is 8.")
+    parser.add_argument('-marky', type=int, help="The amount of squares of the markers in height. Default is 8.")
     parser.add_argument('--inverse', action='store_true', default=False, help="Inverse the binary data")
 
     args = parser.parse_args()
@@ -57,5 +68,7 @@ if __name__ == "__main__":
     yblocks = args.yblocks if args.yblocks else DEFAULT
     offsetx = args.offsetx if args.offsetx else 0
     offsety = args.offsety if args.offsety else 0
+    markx = args.markx if args.markx else 8
+    marky = args.marky if args.marky else 8
 
-    binterpret(args.filename, xblocks, yblocks, offsetx, offsety, args.inverse)
+    binterpret(args.filename, xblocks, yblocks, offsetx, offsety, markx, marky, args.inverse)
