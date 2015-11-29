@@ -14,7 +14,7 @@ def string_reverse(s):
     return '0'
 
 
-def binterpret(filename, abx, aby, offsetx, offsety, msizex, msizey, inverse):
+def binterpret(filename, abx=8, aby=8, offsetx=0, offsety=0, msizex=8, msizey=8, inverse=False):
     try:
         img = Image.open(filename)
     except IOError:
@@ -41,11 +41,7 @@ def binterpret(filename, abx, aby, offsetx, offsety, msizex, msizey, inverse):
             new_data = to_add if pixel_red < 128 else string_reverse(to_add)
             binary_data += new_data
 
-    print binary_data
-
-    d = [binary_data[8*i:8*(i+1)] for i in range(len(binary_data)/8)]
-    d = [int(i, 2) for i in d]
-    print "".join(chr(i) for i in d)
+    return binary_data
 
 
 if __name__ == "__main__":
@@ -53,6 +49,8 @@ if __name__ == "__main__":
     DEFAULT = 8
 
     parser = argparse.ArgumentParser(description='Read a QRcode as binary data')
+
+    #Converting arguments
     parser.add_argument('filename', help="The image to interpret")
     parser.add_argument('-xblocks', type=int, help="The amount of squares in width.  Default is 8")
     parser.add_argument('-yblocks', type=int, help="The amount of squares in height. Default is 8")
@@ -61,6 +59,9 @@ if __name__ == "__main__":
     parser.add_argument('-markx', type=int, help="The amount of squares of the markers in width. Default is 8.")
     parser.add_argument('-marky', type=int, help="The amount of squares of the markers in height. Default is 8.")
     parser.add_argument('--inverse', action='store_true', default=False, help="Inverse the binary data")
+
+    #Flag arguments
+    parser.add_argument('--ascii', action='store_true', default=False, help="Print the binary data as ascii")
 
     args = parser.parse_args()
 
@@ -71,4 +72,10 @@ if __name__ == "__main__":
     markx = args.markx if args.markx else 8
     marky = args.marky if args.marky else 8
 
-    binterpret(args.filename, xblocks, yblocks, offsetx, offsety, markx, marky, args.inverse)
+    data = binterpret(args.filename, xblocks, yblocks, offsetx, offsety, markx, marky, args.inverse)
+
+    if args.ascii:
+
+        d = [data[8*i:8*(i+1)] for i in range(len(data)/8)]
+        d = [int(i, 2) for i in d]
+        print "".join(chr(i) for i in d)
