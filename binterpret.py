@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 
-import sys
-import traceback
 import argparse
 from PIL import Image
+import sys
+import traceback
 
 def in_rect(x, y, rect):
     if x >= rect[0][0] and y>=rect[0][1] and x < rect[1][0] and y < rect[1][1]:
@@ -15,27 +15,31 @@ def string_reverse(s):
         return '1'
     return '0'
 
-def binterpret(filename, abx=8, aby=8, offsetx=0, offsety=0, msizex=8, msizey=8, inverse=False):
-    try:
-        img = Image.open(filename)
-    except IOError:
-        traceback.print_exc(file=sys.stdout)
-        exit(3)
-    blockx = (img.size[0] - offsetx)/abx
-    blocky = (img.size[1] - offsety - 25)/aby
+def binterpret(filename,
+                abx, aby,
+                offsetx=0, offsety=0,
+                marginx=0, marginy=0,
+                msizex=8, msizey=8,
+                inverse=False):
+
+    img = Image.open(filename)
+
+    blockx = (img.size[0] - offsetx - marginy)/abx
+    blocky = (img.size[1] - offsety - marginx)/aby
 
     binary_data = ""
 
     for y in range(0, aby):
         for x in range(0, abx):
 
-            #The three markings in the corner
-            if in_rect(x, y, [(0,0), (markx,marky)]):
-                continue
-            if in_rect(x, y, [(abx - markx, 0), (abx,marky)]):
-                continue
-            if in_rect(x, y, [(0,aby - marky), (markx,aby)]):
-                continue
+            if msizex != 0 and msizey != 0:
+                #The three markings in the corner
+                if in_rect(x, y, [(0,0), (msizex,msizey)]):
+                    continue
+                if in_rect(x, y, [(abx - msizex, 0), (abx,msizey)]):
+                    continue
+                if in_rect(x, y, [(0,aby - msizey), (msizex,aby)]):
+                    continue
 
             to_add = '1' if not inverse else '0'
             pixel_red = img.getpixel((offsetx + x * blockx, offsety + y * blocky))[0]
@@ -43,7 +47,6 @@ def binterpret(filename, abx=8, aby=8, offsetx=0, offsety=0, msizex=8, msizey=8,
             binary_data += new_data
 
     return binary_data
-
 
 if __name__ == "__main__":
     DEFAULT = 8
@@ -57,6 +60,8 @@ if __name__ == "__main__":
     parser.add_argument('-offsety', type=int, help="The y-offset in pixels")
     parser.add_argument('-markx', type=int, help="The amount of squares of the markers in width. Default is 8.")
     parser.add_argument('-marky', type=int, help="The amount of squares of the markers in height. Default is 8.")
+    parser.add_argument('-marginx', type=int, help="The margin at the right in pixels")
+    parser.add_argument('-marginy', type=int, help="The margin at the bottom in pixels")
     parser.add_argument('--inverse', action='store_true', default=False, help="Inverse the binary data")
 
     #Flag arguments
@@ -68,12 +73,21 @@ if __name__ == "__main__":
 
     xblocks = args.xblocks if args.xblocks else DEFAULT
     yblocks = args.yblocks if args.yblocks else DEFAULT
-    offsetx = args.offsetx if args.offsetx else 0
-    offsety = args.offsety if args.offsety else 0
     markx = args.markx if args.markx else DEFAULT
     marky = args.marky if args.marky else DEFAULT
+    offsetx = args.offsetx if args.offsetx else 0
+    offsety = args.offsety if args.offsety else 0
+    marginx = args.marginx if args.marginx else 0
+    marginy = args.marginy if args.marginy else 0
 
-    data = binterpret(args.filename, xblocks, yblocks, offsetx, offsety, markx, marky, args.inverse)
+    data = binterpret(
+                        args.filename,
+                        xblocks, yblocks,
+                        offsetx, offsety,
+                        marginx, marginy,
+                        markx, marky,
+                        args.inverse
+                        )
 
     if args.binary:
         print data
