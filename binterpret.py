@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-from binterpret import binterpret
+import binterpret
 import argparse
 
 if __name__ == "__main__":
@@ -35,7 +35,7 @@ if __name__ == "__main__":
     marginx = args.marginx if args.marginx != None else 0
     marginy = args.marginy if args.marginy != None else 0
 
-    data = binterpret(
+    data = binterpret.process_qr(
                         args.filename,
                         xblocks, yblocks,
                         offsetx, offsety,

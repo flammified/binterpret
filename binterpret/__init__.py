@@ -1,1 +1,1 @@
-from .functions import binterpret
+from functions import process_qr

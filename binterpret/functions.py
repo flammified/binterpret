@@ -12,7 +12,8 @@ def string_reverse(s):
         return '1'
     return '0'
 
-def binterpret(filename,
+def process_qr(
+                filename,
                 abx, aby,
                 offsetx=0, offsety=0,
                 marginx=0, marginy=0,
