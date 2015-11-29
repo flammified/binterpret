@@ -22,11 +22,11 @@ def binterpret(filename, abx, aby, offsetx, offsety, inverse):
 
     for y in range(0, aby):
         for x in range(0, abx):
-            if in_rect(x, y, [(0,0), (7,7)]):
+            if in_rect(x, y, [(0,0), (8,8)]):
                 continue
-            if in_rect(x, y, [(abx - 7, 0), (abx,7)]):
+            if in_rect(x, y, [(abx - 8, 0), (abx,8)]):
                 continue
-            if in_rect(x, y, [(0,aby - 7), (7,aby)]):
+            if in_rect(x, y, [(0,aby - 8), (8,aby)]):
                 continue
 
             to_add = '1' if not inverse else '0'
