@@ -15,7 +15,6 @@ def string_reverse(s):
         return '1'
     return '0'
 
-
 def binterpret(filename, abx=8, aby=8, offsetx=0, offsety=0, msizex=8, msizey=8, inverse=False):
     try:
         img = Image.open(filename)
@@ -47,7 +46,7 @@ def binterpret(filename, abx=8, aby=8, offsetx=0, offsety=0, msizex=8, msizey=8,
 
 
 if __name__ == "__main__":
-    DEFAULT =
+    DEFAULT = 8
     parser = argparse.ArgumentParser(description='Read a QRcode as binary data')
 
     #Converting arguments
@@ -62,6 +61,8 @@ if __name__ == "__main__":
 
     #Flag arguments
     parser.add_argument('--ascii', action='store_true', default=False, help="Print the binary data as ascii")
+        #Flag arguments
+    parser.add_argument('--binary', action='store_true', default=False, help="Print the binary data as binary")
 
     args = parser.parse_args()
 
@@ -74,8 +75,10 @@ if __name__ == "__main__":
 
     data = binterpret(args.filename, xblocks, yblocks, offsetx, offsety, markx, marky, args.inverse)
 
-    if args.ascii:
+    if args.binary:
+        print data
 
+    if args.ascii:
         d = [data[8*i:8*(i+1)] for i in range(len(data)/8)]
         d = [int(i, 2) for i in d]
         print "".join(chr(i) for i in d)
