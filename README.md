@@ -12,7 +12,8 @@ Usage
 ➜  binterpret git:(master) python binterpret.py -h
 usage: binterpret.py [-h] [-xblocks XBLOCKS] [-yblocks YBLOCKS]
                      [-offsetx OFFSETX] [-offsety OFFSETY] [-markx MARKX]
-                     [-marky MARKY] [--inverse] [--ascii] [--binary]
+                     [-marky MARKY] [-marginx MARGINX] [-marginy MARGINY]
+                     [--inverse] [--ascii] [--binary]
                      filename
 
 Read a QRcode as binary data
@@ -30,6 +31,8 @@ optional arguments:
                     8.
   -marky MARKY      The amount of squares of the markers in height. Default is
                     8.
+  -marginx MARGINX  The margin at the right in pixels
+  -marginy MARGINY  The margin at the bottom in pixels
   --inverse         Inverse the binary data
   --ascii           Print the binary data as ascii
   --binary          Print the binary data as binary
