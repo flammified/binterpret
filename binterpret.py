@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+from __future__ import print_function
 
 import binterpret
 import argparse
@@ -25,7 +26,6 @@ parser.add_argument('--gui', action='store_true', default=False, help="Start the
 
 args = parser.parse_args()
 
-
 if args.gui:
     gui = binterpret.GUI()
     gui.run()
@@ -49,10 +49,10 @@ data = binterpret.process_qr(
                     args.inverse
                     )
 
-    if args.binary:
-        print data
+if args.binary:
+    print(data)
 
-    if args.ascii:
-        d = [data[8*i:8*(i+1)] for i in range(len(data)/8)]
-        d = [int(i, 2) for i in d]
-        print "".join(chr(i) for i in d)
+if args.ascii:
+    d = [data[8*i:8*(i+1)] for i in range(len(data)/8)]
+    d = [int(i, 2) for i in d]
+    print("".join(chr(i) for i in d))

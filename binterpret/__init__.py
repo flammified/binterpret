@@ -1,1 +1,1 @@
-from functions import process_qr
+from .functions import process_qr
