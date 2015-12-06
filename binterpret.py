@@ -1,7 +1,5 @@
 #!/usr/bin/env python
 from __future__ import print_function
-
-import binterpret
 import argparse
 
 DEFAULT = 8
@@ -27,7 +25,11 @@ parser.add_argument('--gui', action='store_true', default=False, help="Start the
 args = parser.parse_args()
 
 if args.gui:
-    gui = binterpret.GUI()
+
+    #importing binterpretapp later, so we can use argparse correctly
+    from binterpret.gui import BinterpretApp
+
+    gui = BinterpretApp()
     gui.run()
     exit(1)
 
@@ -40,7 +42,9 @@ offsety = args.offsety if args.offsety != None else 0
 marginx = args.marginx if args.marginx != None else 0
 marginy = args.marginy if args.marginy != None else 0
 
-data = binterpret.process_qr(
+from binterpret.functions import process_qr
+
+data = process_qr(
                     args.filename,
                     xblocks, yblocks,
                     offsetx, offsety,
