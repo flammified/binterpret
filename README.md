@@ -13,7 +13,7 @@ Usage
 usage: binterpret.py [-h] [-xblocks XBLOCKS] [-yblocks YBLOCKS]
                      [-offsetx OFFSETX] [-offsety OFFSETY] [-markx MARKX]
                      [-marky MARKY] [-marginx MARGINX] [-marginy MARGINY]
-                     [--inverse] [--ascii] [--binary]
+                     [--inverse] [--ascii] [--binary] [--gui]
                      filename
 
 Read a QRcode as binary data
@@ -36,4 +36,5 @@ optional arguments:
   --inverse         Inverse the binary data
   --ascii           Print the binary data as ascii
   --binary          Print the binary data as binary
+  --gui             Experimental GUI mode
 ```

@@ -20,7 +20,7 @@ parser.add_argument('--inverse', action='store_true', default=False, help="Inver
 #Flag arguments
 parser.add_argument('--ascii', action='store_true', default=False, help="Print the binary data as ascii")
 parser.add_argument('--binary', action='store_true', default=False, help="Print the binary data as binary")
-parser.add_argument('--gui', action='store_true', default=False, help="Start the program with an GUI")
+parser.add_argument('--gui', action='store_true', default=False, help="Experimental GUI mode")
 
 args = parser.parse_args()
 
