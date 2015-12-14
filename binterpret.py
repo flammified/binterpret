@@ -1,8 +1,14 @@
 #!/usr/bin/env python
 from __future__ import print_function
+import sys
 import argparse
 
 DEFAULT = 8
+
+#Argv voodoo so Kivy does not take over the world of arguments
+argv = sys.argv[1:]
+sys.argv = sys.argv[0]
+
 parser = argparse.ArgumentParser(description='Read a QRcode as binary data')
 
 #Converting arguments
@@ -22,7 +28,7 @@ parser.add_argument('--ascii', action='store_true', default=False, help="Print t
 parser.add_argument('--binary', action='store_true', default=False, help="Print the binary data as binary")
 parser.add_argument('--gui', action='store_true', default=False, help="Experimental GUI mode")
 
-args = parser.parse_args()
+args = parser.parse_args(argv)
 
 if args.gui:
 
