@@ -1,4 +1,44 @@
 <BinterpretWidget>:
-    Label:
-        font_size:70
-        text: "Test"
+    BoxLayout:
+        orientation: 'horizontal'
+        padding: 10
+
+        BoxLayout:
+            orientation: 'vertical'
+
+            GridLayout:
+                cols: 2
+                row_default_height: 40
+                row_force_default: True
+
+                #X blocks
+                Label:
+                    size_hint_x: 0.4
+                    text: "X QR blocks"
+
+                TextInput:
+                    hint_text: "8"
+
+                #Y blocks
+                Label:
+                    size_hint_x: 0.4
+                    text:"Y QR blocks"
+
+                TextInput:
+                    hint_text: "8"
+
+                Label:
+                    text: ""
+
+                Button:
+                    text: "Decode"
+
+            #Output
+            TextInput:
+                id: "output"
+        Widget:
+            id: "qr"
+            canvas:
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
